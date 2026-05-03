@@ -9,6 +9,7 @@ import { IdentityCard } from "@/components/IdentityCard";
 import { MetricStrip } from "@/components/MetricStrip";
 import { FeaturedWorks } from "@/components/FeaturedWorks";
 import { MockBanner } from "@/components/MockBanner";
+import { AgentEnsip25Block } from "@/components/AgentEnsip25Block";
 
 export function PublicArtistView({ profile }: { profile: EnsProfile }) {
   const [config, setConfig] = useState<ArtistConfig | null>(null);
@@ -72,7 +73,11 @@ export function PublicArtistView({ profile }: { profile: EnsProfile }) {
       </section>
 
       <section className="rounded-2xl border border-accent/25 bg-accent/5 p-4 sm:p-5">
-        <h2 className="text-[10px] font-mono uppercase tracking-widest text-accent">Curator agent</h2>
+        <h2 className="text-[10px] font-mono uppercase tracking-widest text-accent">AI agent (ENSIP-25)</h2>
+        <div className="mt-2">
+          <AgentEnsip25Block artistEns={profile.name} agentId={config.agentId} />
+        </div>
+        <p className="mt-3 font-mono text-[10px] uppercase tracking-widest text-muted">Curator label</p>
         <p className="mt-1 font-mono text-xs text-zinc-300">
           {config.curatorEns.trim() || `curator.${profile.name}`}
         </p>

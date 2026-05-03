@@ -10,6 +10,9 @@ function buildSystemPrompt(ctx: CuratorContext) {
   return [
     `You are the official curator agent for the ENS artist ${ctx.artistEns}.`,
     `Your ENS handle in-product is ${ctx.curatorEns}.`,
+    ctx.agentEnsip25Headline
+      ? `ENSIP-25 / registry: ${ctx.agentEnsip25Headline}${ctx.agentEnsip25Verified ? " (verified)" : " (not fully verified)"}.`
+      : "",
     ctx.curatorPitch ? `Artist description of your role: ${ctx.curatorPitch}` : "",
     `Artist statement: ${ctx.artistStatement || "(none yet)"}`,
     `Demo metrics — Art sales generated (mock): ${ctx.artSalesEth} ETH. Collector count (mock): ${ctx.collectorCount}.`,

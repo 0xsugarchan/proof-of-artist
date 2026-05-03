@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { EnsProfile } from "@/lib/ens";
-import { shortAddress } from "@/lib/ens";
 import type { ArtistConfig } from "@/lib/artistStore";
 import { loadArtistConfig, parseContractInput, saveArtistConfig } from "@/lib/artistStore";
 import { mockMetricsForContracts } from "@/lib/mockOnchain";
 import { IdentityCard } from "@/components/IdentityCard";
 import { MetricStrip } from "@/components/MetricStrip";
 import { MockBanner } from "@/components/MockBanner";
+import { AgentEnsip25Block } from "@/components/AgentEnsip25Block";
 
 type Props = { profile: EnsProfile };
 
@@ -51,6 +51,7 @@ export function DashboardEditor({ profile }: Props) {
       statement: config.statement,
       curatorEns: config.curatorEns,
       curatorPitch: config.curatorPitch,
+      agentId: config.agentId,
       contracts,
     };
     persist(next);
@@ -117,6 +118,23 @@ export function DashboardEditor({ profile }: Props) {
       </section>
 
       <section className="space-y-3 rounded-2xl border border-line bg-panel/40 p-4 sm:p-5">
+        <h2 className="text-sm font-medium">AI agent registry</h2>
+        <p className="text-xs text-muted">
+          Agent registry for the netwrok. Verification uses ENS text record{" "}
+        </p>
+        <label className="block text-xs text-muted">Agent id</label>
+        <input
+          value={config.agentId}
+          onChange={(e) => setConfig({ ...config, agentId: e.target.value })}
+          placeholder="1"
+          className="w-full max-w-xs rounded-lg border border-line bg-ink px-3 py-2 font-mono text-xs text-zinc-100 outline-none ring-accent/30 focus:ring-2"
+        />
+        <div className="rounded-xl border border-line/80 bg-ink/40 p-3">
+          <AgentEnsip25Block artistEns={ensKey} agentId={config.agentId} showSetupHint />
+        </div>
+      </section>
+
+      <section className="space-y-3 rounded-2xl border border-line bg-panel/40 p-4 sm:p-5">
         <h2 className="text-sm font-medium">Curator agent</h2>
         <p className="text-xs text-muted">Example: curator.{profile.name}</p>
         <input
@@ -161,10 +179,6 @@ export function DashboardEditor({ profile }: Props) {
           Open curator Q&amp;A
         </Link>
       </div>
-
-      <p className="font-mono text-[10px] text-zinc-600">
-        Wallet: {profile.address} ({shortAddress(profile.address)})
-      </p>
     </div>
   );
 }

@@ -22,7 +22,8 @@ const sepolia = defineChain({
 
 const rpcUrl = process.env.NEXT_PUBLIC_ETH_RPC_URL;
 
-const publicClient = createPublicClient({
+/** Sepolia JSON-RPC client (ENS + optional registry reads). */
+export const sepoliaPublicClient = createPublicClient({
   chain: sepolia,
   transport: http(rpcUrl),
 });
@@ -33,6 +34,8 @@ export type EnsProfile = {
   avatar: string | null;
   /** Primary display name if set */
   displayName: string | null;
+  /** ENS text record: com.twitter (X/Twitter handle) */
+  xHandle: string | null;
 };
 
 export function normalizeEnsInput(input: string): string | null {
@@ -55,15 +58,18 @@ export async function resolveEnsProfile(
   }
 
   try {
-    const address = await publicClient.getEnsAddress({ name });
+    const address = await sepoliaPublicClient.getEnsAddress({ name });
     if (!address || address === "0x0000000000000000000000000000000000000000") {
       return { ok: false, error: "Name did not resolve to a wallet." };
     }
 
-    const [avatar, displayName] = await Promise.all([
-      publicClient.getEnsAvatar({ name }).catch(() => null),
-      publicClient.getEnsText({ name, key: "name" }).catch(() => null),
+    const [avatar, displayName, xHandle, legacyTwitter] = await Promise.all([
+      sepoliaPublicClient.getEnsAvatar({ name }).catch(() => null),
+      sepoliaPublicClient.getEnsText({ name, key: "name" }).catch(() => null),
+      sepoliaPublicClient.getEnsText({ name, key: "com.twitter" }).catch(() => null),
+      sepoliaPublicClient.getEnsText({ name, key: "vnd.twitter" }).catch(() => null),
     ]);
+    const handle = (xHandle?.trim() || legacyTwitter?.trim() || "") || null;
 
     return {
       ok: true,
@@ -72,6 +78,7 @@ export async function resolveEnsProfile(
         address,
         avatar: avatar ?? null,
         displayName: displayName?.trim() || null,
+        xHandle: handle,
       },
     };
   } catch {

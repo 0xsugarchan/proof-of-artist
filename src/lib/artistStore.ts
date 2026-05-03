@@ -10,6 +10,8 @@ export type ArtistConfig = {
   /** e.g. curator.sugarchan.eth */
   curatorEns: string;
   curatorPitch: string;
+  /** Agent id in the minimal registry (ENSIP-25 / demo). */
+  agentId: string;
 };
 
 const defaultConfig = (): ArtistConfig => ({
@@ -17,6 +19,7 @@ const defaultConfig = (): ArtistConfig => ({
   statement: "",
   curatorEns: "",
   curatorPitch: "",
+  agentId: "1",
 });
 
 export function artistStorageKey(ensName: string) {
@@ -37,6 +40,7 @@ export function loadArtistConfig(ensName: string): ArtistConfig {
       statement: typeof parsed.statement === "string" ? parsed.statement : "",
       curatorEns: typeof parsed.curatorEns === "string" ? parsed.curatorEns : "",
       curatorPitch: typeof parsed.curatorPitch === "string" ? parsed.curatorPitch : "",
+      agentId: typeof parsed.agentId === "string" && parsed.agentId.trim() ? parsed.agentId.trim() : "1",
     };
   } catch {
     return defaultConfig();

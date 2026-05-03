@@ -1,5 +1,6 @@
 import type { EnsProfile } from "@/lib/ens";
 import { shortAddress } from "@/lib/ens";
+import Link from "next/link";
 
 type Props = {
   profile: EnsProfile;
@@ -8,6 +9,8 @@ type Props = {
 
 export function IdentityCard({ profile, badge = "Verified ENS" }: Props) {
   const title = profile.displayName || profile.name;
+  const xHandle = profile.xHandle?.trim().replace(/^@/, "") || null;
+  const xHref = xHandle ? `https://x.com/${encodeURIComponent(xHandle)}` : null;
 
   return (
     <div className="overflow-hidden rounded-2xl border border-line bg-panel/90 shadow-xl shadow-black/40">
@@ -34,7 +37,18 @@ export function IdentityCard({ profile, badge = "Verified ENS" }: Props) {
           <p className="text-[10px] font-mono uppercase tracking-widest text-accent">{badge}</p>
           <h1 className="truncate text-lg font-semibold tracking-tight sm:text-xl">{title}</h1>
           <p className="truncate font-mono text-xs text-muted">{profile.name}</p>
-          <p className="mt-1 font-mono text-xs text-zinc-400">{shortAddress(profile.address)}</p>
+          <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+            {xHref ? (
+              <Link
+                href={xHref}
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono text-xs text-accent/90 underline-offset-4 hover:text-accent hover:underline"
+              >
+                x.com/{xHandle}
+              </Link>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>
