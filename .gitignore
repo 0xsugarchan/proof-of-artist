@@ -20,3 +20,5 @@ out
 *.tsbuildinfo
 
 .DS_Store
+
+.introduction.md
