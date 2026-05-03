@@ -30,10 +30,10 @@ function mockReply(ctx: CuratorContext, lastUser: string): string {
     return `I am the curator tied to ${ctx.curatorEns}, speaking for ${ctx.artistEns}. ${ctx.curatorPitch || "I help visitors understand their onchain work and official contracts."}`;
   }
   if (/eth|sale|revenue|money|earn/.test(q)) {
-    return `For this demo, **Art sales generated** is shown as about ${ctx.artSalesEth} ETH from the contracts you listed—mock data, not audited onchain totals. Net after fees may differ.`;
+    return `Art sales generated is shown as about ${ctx.artSalesEth} ETH from the contracts you listed—mock data, not audited onchain totals. Net after fees may differ.`;
   }
   if (/collector|collectors|community/.test(q)) {
-    return `Demo **collector count** is around ${ctx.collectorCount}, derived for the hackathon preview. Real distribution lives onchain across those wallets.`;
+    return `Collector count is around ${ctx.collectorCount}, derived for the hackathon preview. Real distribution lives onchain across those wallets.`;
   }
   if (/contract|official|verify/.test(q)) {
     if (!ctx.contracts.length) {
