@@ -1,5 +1,4 @@
 import type { EnsProfile } from "@/lib/ens";
-import { shortAddress } from "@/lib/ens";
 import Link from "next/link";
 
 type Props = {
